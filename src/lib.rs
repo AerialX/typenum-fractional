@@ -82,8 +82,22 @@ impl<N: Unsigned, D: Unsigned + NonZero> Fractional for Fraction<N, D> {
 
 impl<N: Unsigned + NonZero, D: Unsigned + NonZero> NonZero for Fraction<N, D> { }
 
+impl<N, D> Copy for Fraction<N, D> { }
+
+impl<N, D> Clone for Fraction<N, D> {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
 impl<N, D> ConstDefault for Fraction<N, D> {
     const DEFAULT: Self = Fraction::new();
+}
+
+impl<N, D> Default for Fraction<N, D> {
+    fn default() -> Self {
+        Fraction::new()
+    }
 }
 
 impl<O, R: Fractional> Truncate for R where
@@ -99,6 +113,10 @@ impl<O, OR, N: Unsigned, D: Unsigned + NonZero, RHS: Fractional> Cmp<RHS> for Fr
     O: Cmp<OR>,
 {
     type Output = Compare<O, OR>;
+
+    fn compare<P: typenum::private::InternalMarker>(&self, _: &RHS) -> Self::Output {
+        unsafe { ::core::mem::MaybeUninit::uninit().assume_init() }
+    }
 }
 
 impl<N: Unsigned + GreatestCommon<D>, D: Unsigned + NonZero> Reduce for Fraction<N, D> where
