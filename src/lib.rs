@@ -1,5 +1,5 @@
 #![no_std]
-#![cfg_attr(feature = "unstable", feature(const_fn, const_if_match))]
+#![cfg_attr(feature = "unstable", feature(const_fn_floating_point_arithmetic))]
 
 use core::marker::PhantomData;
 use typenum::{
